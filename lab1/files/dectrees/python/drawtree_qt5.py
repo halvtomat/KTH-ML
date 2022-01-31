@@ -1,6 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-import dtree
+import files.dectrees.python.dtree as dtree
 import sys
 
 from PyQt5 import QtCore, QtGui
@@ -68,13 +68,3 @@ def drawTree(tree):
 
     win.show()
     sys.exit(application.exec_())
-
-
-
-
-
-
-
-
-
-
