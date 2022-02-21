@@ -17,7 +17,7 @@ class Svm:
 	def __init__(self, N, C, t, x):
 		self.N = N
 		self.C = C
-		self.K = self.radial_kernel
+		self.K = self.lin_kernel
 		self.t = t
 		self.x = x
 	
@@ -37,7 +37,7 @@ class Svm:
 		return math.pow(np.dot(a, b) + 1, p)
 	
 	def radial_kernel(self, a, b):
-		s = 5
+		s = 3
 		return math.exp(-math.pow(math.dist(a, b), 2)/(2 * math.pow(s, 2))) 
 
 	def zerofun(self, a):
@@ -69,10 +69,13 @@ class Svm:
 		self.b = self.calc_b()
 
 def gen_test_data(N):
+	width = 0.2
 	classA = np.concatenate(
-		(np.random.randn(int(N/4), 2) * 0.2 + [1.5, 0.5],
-		 np.random.randn(int(N/4), 2) * 0.2 + [-1.5, 0.5]))
-	classB = np.random.randn(int(N/2), 2) * 0.2 + [0.0, -0.5]
+		(np.random.randn(int(N/4), 2) * width + [1.5, 1.5],
+		 #np.random.randn(int(N/8), 2) * width + [-2.0, -2.0],
+		 #np.random.randn(int(N/8), 2) * width + [2.0, -2.0],
+		 np.random.randn(int(N/4), 2) * width + [-1.5, 1.5]))
+	classB = np.random.randn(int(N/2), 2) * width + [0.0, 0.0]
 	inputs = np.concatenate((classA, classB))
 	targets = np.concatenate(
 		(np.ones(classA.shape[0]),
