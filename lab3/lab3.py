@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # coding: utf-8
 
 # # Lab 3: Bayes Classifier and Boosting
@@ -17,10 +17,10 @@
 # Check out `labfuns.py` if you are interested in the details.
 
 import numpy as np
-from scipy import misc
-from imp import reload
+#from scipy import misc
+#from imp import reload
 from labfuns import *
-import random
+#import random
 
 
 # ## Bayes classifier functions to implement
@@ -37,15 +37,9 @@ def computePrior(labels, W=None):
         W = np.ones((Npts,1))/Npts
     else:
         assert(W.shape[0] == Npts)
-    classes = np.unique(labels)
-    Nclasses = np.size(classes)
+    _, counts = np.unique(labels, return_counts=True)
 
-    prior = np.zeros((Nclasses,1))
-
-    # TODO: compute the values of prior for each class!
-    # ==========================
-    
-    # ==========================
+    prior = counts / np.size(labels)
 
     return prior
 
@@ -66,16 +60,11 @@ def mlParams(X, labels, W=None):
     mu = np.zeros((Nclasses,Ndims))
     sigma = np.zeros((Nclasses,Ndims,Ndims))
 
-    # TODO: fill in the code to compute mu and sigma!
-    # ==========================
     for i,c in enumerate(classes):
-        x = np.transpose(X[labels == c,:])
-        for j in range(Ndims):
-            mu[i][j] = np.sum(x[j]) / len(x[j])
-
-    
-
-    # ==========================
+        x = X[labels == c,:]   
+        mu[i] = np.mean(x, axis=0)
+        #sigma[i] = np.cov(x)
+        sigma[i] = np.matmul((x - mu[i]).T, (x - mu[i])) / (len(x) - 1)
 
     return mu, sigma
 
@@ -89,10 +78,18 @@ def classifyBayes(X, prior, mu, sigma):
     Npts = X.shape[0]
     Nclasses,Ndims = np.shape(mu)
     logProb = np.zeros((Nclasses, Npts))
-
+    #print(Ndims)
+    print(sigma[0])
+    #print(mu[0])
+    print(np.matmul((X - mu[0]), np.linalg.inv(sigma[0])))
     # TODO: fill in the code to compute the log posterior logProb!
     # ==========================
-    
+    for i in range(Nclasses):
+        a = np.log(np.abs(sigma[i]))
+        b = np.matmul((X - mu[i]), np.matmul(np.linalg.inv(sigma[i]), (X - mu[i])).T)
+        print(np.shape(b))
+        c = np.log(prior[i])
+        logProb[i] = - 1/2 * b  + c
     # ==========================
     
     # one possible way of finding max a-posteriori once
@@ -125,15 +122,15 @@ class BayesClassifier(object):
 # Call `genBlobs` and `plotGaussian` to verify your estimates.
 
 
-X, labels = genBlobs(centers=5)
-mu, sigma = mlParams(X,labels)
-plotGaussian(X,labels,mu,sigma)
+#X, labels = genBlobs(centers=5)
+#mu, sigma = mlParams(X,labels)
+#plotGaussian(X,labels,mu,sigma)
 
 
 # Call the `testClassifier` and `plotBoundary` functions for this part.
 
 
-#testClassifier(BayesClassifier(), dataset='iris', split=0.7)
+testClassifier(BayesClassifier(), dataset='iris', split=0.7)
 
 
 
