@@ -81,13 +81,12 @@ def classifyBayes(X, prior, mu, sigma):
     
     # TODO: fill in the code to compute the log posterior logProb!
     # ==========================
-
     for i in range(Nclasses):
         a = -0.5 * np.log(np.linalg.det(sigma[i]))
-        b = -0.5 * np.linalg.multi_dot([(X - mu[i]), np.linalg.inv(sigma[i]), (X - mu[i]).T])
         c = np.log(prior[i])
-        print(np.shape(a), np.shape(b), np.shape(c))
-        logProb[i] = a + b  + c
+        for j in range(Npts):
+            b = -0.5 * np.linalg.multi_dot([(X[j,:] - mu[i]), np.linalg.inv(sigma[i]), (X[j,:] - mu[i]).T])
+            logProb[i][j] = a + b + c
     # ==========================
     
     # one possible way of finding max a-posteriori once
