@@ -43,7 +43,7 @@ As previously, the boosted classifier has better mean accuracy and standard devi
 
 ## Assignment 7
 
-If I know that my data is noisy I would not use either of the boosted classifiers because of their sensitivity to outliers. I think the decision tree classifier would perform best in such a case.
+If I know that my data is noisy I would not use either of the boosted classifiers because of their sensitivity to outliers. I think the decision tree classifier would perform best in such a case if you prune the tree. Naive Bayes would also work good.
 
 I think a boosted naive Bayes would perform best in a dataset with some irrelevant inputs since the naive Bayes isn't prone to over-fitting like decision trees and the boosting will probably make the classifier find the truly important features.
 
